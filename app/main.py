@@ -33,12 +33,12 @@ class PrintBookReverse:
         print(book.content[::-1])
 
 
-class DisplayConsole:
+class DisplayBookConsole:
     def display(self, book: Book) -> None:
         print(book.content)
 
 
-class DisplayReverse:
+class DisplayBookReverse:
     def display(self, book: Book) -> None:
         print(book.content[::-1])
 
@@ -47,10 +47,10 @@ def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
     for cmd, method_type in commands:
         if cmd == "display":
             if method_type == "console":
-                display_console = DisplayConsole()
+                display_console = DisplayBookConsole()
                 display_console.display(book)
             if method_type == "reverse":
-                display_reverse = DisplayReverse()
+                display_reverse = DisplayBookReverse()
                 display_reverse.display(book)
         elif cmd == "print":
             if method_type == "console":
