@@ -7,16 +7,6 @@ class Book:
         self.title = title
         self.content = content
 
-    def print_book(self, print_type: str) -> None:
-        if print_type == "console":
-            print(f"Printing the book: {self.title}...")
-            print(self.content)
-        elif print_type == "reverse":
-            print(f"Printing the book in reverse: {self.title}...")
-            print(self.content[::-1])
-        else:
-            raise ValueError(f"Unknown print type: {print_type}")
-
     def serialize(self, serialize_type: str) -> str:
         if serialize_type == "json":
             return json.dumps({"title": self.title, "content": self.content})
@@ -29,6 +19,18 @@ class Book:
             return ET.tostring(root, encoding="unicode")
         else:
             raise ValueError(f"Unknown serialize type: {serialize_type}")
+
+
+class PrintBookConsole:
+    def print_book(self, book: Book) -> None:
+        print(f"Printing the book: {book.title}...")
+        print(book.content)
+
+
+class PrintBookReverse:
+    def print_book(self, book: Book) -> None:
+        print(f"Printing the book in reverse: {book.title}...")
+        print(book.content[::-1])
 
 
 class DisplayConsole:
@@ -51,7 +53,12 @@ def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
                 display_reverse = DisplayReverse()
                 display_reverse.display(book)
         elif cmd == "print":
-            book.print_book(method_type)
+            if method_type == "console":
+                print_console = PrintBookConsole()
+                print_console.print_book(book)
+            if method_type == "reverse":
+                print_reverse = PrintBookReverse()
+                print_reverse.print_book(book)
         elif cmd == "serialize":
             return book.serialize(method_type)
 
