@@ -7,14 +7,6 @@ class Book:
         self.title = title
         self.content = content
 
-    def display(self, display_type: str) -> None:
-        if display_type == "console":
-            print(self.content)
-        elif display_type == "reverse":
-            print(self.content[::-1])
-        else:
-            raise ValueError(f"Unknown display type: {display_type}")
-
     def print_book(self, print_type: str) -> None:
         if print_type == "console":
             print(f"Printing the book: {self.title}...")
@@ -39,10 +31,25 @@ class Book:
             raise ValueError(f"Unknown serialize type: {serialize_type}")
 
 
+class DisplayConsole:
+    def display(self, book: Book) -> None:
+        print(book.content)
+
+
+class DisplayReverse:
+    def display(self, book: Book) -> None:
+        print(book.content[::-1])
+
+
 def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
     for cmd, method_type in commands:
         if cmd == "display":
-            book.display(method_type)
+            if method_type == "console":
+                display_console = DisplayConsole()
+                display_console.display(book)
+            if method_type == "reverse":
+                display_reverse = DisplayReverse()
+                display_reverse.display(book)
         elif cmd == "print":
             book.print_book(method_type)
         elif cmd == "serialize":
