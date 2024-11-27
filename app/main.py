@@ -7,19 +7,6 @@ class Book:
         self.title = title
         self.content = content
 
-    def serialize(self, serialize_type: str) -> str:
-        if serialize_type == "json":
-            return json.dumps({"title": self.title, "content": self.content})
-        elif serialize_type == "xml":
-            root = ET.Element("book")
-            title = ET.SubElement(root, "title")
-            title.text = self.title
-            content = ET.SubElement(root, "content")
-            content.text = self.content
-            return ET.tostring(root, encoding="unicode")
-        else:
-            raise ValueError(f"Unknown serialize type: {serialize_type}")
-
 
 class PrintBookConsole:
     def print_book(self, book: Book) -> None:
@@ -43,6 +30,21 @@ class DisplayBookReverse:
         print(book.content[::-1])
 
 
+class SerializeBookJson:
+    def serialize(self, book: Book) -> str:
+        return json.dumps({"title": book.title, "content": book.content})
+
+
+class SerializeBookXml:
+    def serialize(self, book: Book) -> str:
+        root = ET.Element("book")
+        title = ET.SubElement(root, "title")
+        title.text = book.title
+        content = ET.SubElement(root, "content")
+        content.text = book.content
+        return ET.tostring(root, encoding="unicode")
+
+
 def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
     for cmd, method_type in commands:
         if cmd == "display":
@@ -60,7 +62,12 @@ def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
                 print_reverse = PrintBookReverse()
                 print_reverse.print_book(book)
         elif cmd == "serialize":
-            return book.serialize(method_type)
+            if method_type == "xml":
+                xml_serialize = SerializeBookXml()
+                return xml_serialize.serialize(book)
+            if method_type == "json":
+                json_serialize = SerializeBookJson()
+                return json_serialize.serialize(book)
 
 
 if __name__ == "__main__":
