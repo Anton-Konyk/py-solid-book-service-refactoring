@@ -68,6 +68,8 @@ def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
             if method_type == "json":
                 json_serialize = SerializeBookJson()
                 return json_serialize.serialize(book)
+        else:
+            raise ValueError("Unknown data type")
 
 
 if __name__ == "__main__":
